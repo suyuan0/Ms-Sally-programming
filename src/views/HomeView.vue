@@ -1,19 +1,18 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
-  </div>
+  <el-button @click='dl'>登录</el-button>
 </template>
 
-<script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+<script setup>
+import axios from '@/utils/request'
 
-export default {
-  name: 'HomeView',
-  components: {
-    HelloWorld
-  },
-  created() {}
+const dl = async () => {
+  await axios({
+    url: '/login',
+    method: 'post',
+    data: {
+      username: 'yangmr',
+      password: '123456'
+    }
+  })
 }
 </script>
