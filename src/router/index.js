@@ -10,7 +10,14 @@ const routes = [
   {
     path: '/',
     name: 'layout',
-    component: layout
+    component: layout,
+    children: [
+      {
+        path: '/404',
+        name: '404',
+        component: () => import('@/views/404')
+      }
+    ]
   }
 ]
 
