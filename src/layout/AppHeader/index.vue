@@ -6,7 +6,7 @@
     </span>
     <!--    左侧菜单伸缩-->
     <div class='icon-button'>
-      <el-icon>
+      <el-icon @click='changeIsCollapse'>
         <Fold />
       </el-icon>
     </div>
@@ -176,6 +176,10 @@ const userInfo = computed(() => {
     avatar: 'https://portrait.gitee.com/uploads/avatars/user/3659/10978559_suyuan_0_1652861325.png'
   }
 })
+// 菜单伸缩
+const changeIsCollapse = () => {
+  store.commit('menu/changeIsCollapse')
+}
 </script>
 
 <style lang='scss' scoped>
