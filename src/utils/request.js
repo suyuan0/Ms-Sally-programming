@@ -2,6 +2,7 @@ import axios from 'axios'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { ElMessage } from 'element-plus'
+import store from '@/store'
 // 创建axios实例
 const instance = axios.create({
   baseURL: process.env.VUE_APP_API,
@@ -12,6 +13,10 @@ const instance = axios.create({
 instance.interceptors.request.use(
   (config) => {
     NProgress.start()
+    const token = store.getters.token
+    if (token) {
+      config.headers.token = token
+    }
     // 在发送请求之前做些什么
     return config
   },
