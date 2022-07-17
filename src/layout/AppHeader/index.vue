@@ -184,6 +184,7 @@ const changeIsCollapse = () => {
 
 <style lang='scss' scoped>
 .header-container {
+  z-index: 10000;
   color: #fff;
   display: flex;
   align-items: center;
@@ -192,6 +193,7 @@ const changeIsCollapse = () => {
   left: 0px;
   right: 0px;
   height: 64px;
+  background: #4338ca;
 
   .logo {
     width: 250px;

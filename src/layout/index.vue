@@ -7,7 +7,9 @@
       <el-aside :width=' isCollapse ? "64px" : "250px"'>
         <AppAside />
       </el-aside>
-      <el-main>
+      <el-main :style='{marginLeft :isCollapse ? "64px" : "250px" }'>
+        <!--  tagsView-->
+        <TagsView></TagsView>
         <AppMain />
       </el-main>
     </el-container>
@@ -20,6 +22,8 @@ import AppAside from './AppAside'
 import AppMain from './AppMain'
 import { useStore } from 'vuex'
 import { computed } from 'vue'
+
+import TagsView from '@/components/TagsView'
 
 const store = useStore()
 const isCollapse = computed(() => {
@@ -40,11 +44,23 @@ const isCollapse = computed(() => {
     .el-aside {
       transition: all .4s;
       background: #fdfdfd;
+      -ms-overflow-style: none; /* IE 10+ */
+      scrollbar-width: none; /* Firefox */
+      position: fixed;
+      z-index: 1000;
+      height: 100%;
     }
 
     .el-main {
       background: #f3f4f6;
+      width: 100%;
+      position: relative;
+      transition: all .4s;
     }
   }
+}
+
+::-webkit-scrollbar {
+  display: none; /* Chrome Safari */
 }
 </style>

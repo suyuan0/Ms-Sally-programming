@@ -1,5 +1,5 @@
 <template>
-  <el-menu :collapse='isCollapse' router unique-opened>
+  <el-menu :collapse='isCollapse' :default-active='$route.path' router unique-opened>
     <MenuTree v-for='(item,i) in menuList' :key='i' :i='i' :item='item'></MenuTree>
   </el-menu>
 </template>
