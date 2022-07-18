@@ -38,11 +38,12 @@
           <template #header>
             <span class='title'>订单统计</span>
             <div class='check-tag'>
-              <el-check-tag>近1个月</el-check-tag>
-              <el-check-tag>近1周</el-check-tag>
-              <el-check-tag>近24小时</el-check-tag>
+              <el-check-tag :checked='echartType==="month"' @click='changeEchartType("month")'>近1个月</el-check-tag>
+              <el-check-tag :checked='echartType==="week"' @click='changeEchartType("week")'>近1周</el-check-tag>
+              <el-check-tag :checked='echartType==="hour"' @click='changeEchartType("hour")'>近24小时</el-check-tag>
             </div>
           </template>
+          <div id='echarts'></div>
         </el-card>
       </el-col>
       <!--      右侧-->
@@ -88,15 +89,18 @@
 
 <script setup>
 import { statistics1API, statistics2API, statistics3API } from '@/api'
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 import routerList from './routerList'
 import { useRouter } from 'vue-router'
+import * as echarts from 'echarts'
 
 const router = useRouter()
 const skeletonLoading = ref(true)
 const panelsList = ref([])
 const goodsList = ref([])
 const orderList = ref([])
+const echartType = ref('week')
+const echartLoading = ref(null)
 const getStatistics = async () => {
   try {
     const { panels } = await statistics1API()
@@ -104,12 +108,17 @@ const getStatistics = async () => {
       goods,
       order
     } = await statistics2API()
-    const res = await statistics3API({ type: 'week' })
+    const {
+      x,
+      y
+    } = await statistics3API({ type: echartType.value })
     panelsList.value = panels
     goodsList.value = goods
     orderList.value = order
     skeletonLoading.value = false
-    console.log(res)
+    nextTick(() => {
+      generateEcharts(x, y)
+    })
   } catch (e) {
     console.log(e)
   }
@@ -117,6 +126,43 @@ const getStatistics = async () => {
 getStatistics()
 const toViews = (path) => {
   router.push(path)
+}
+// 柱状图
+const generateEcharts = (x, y) => {
+  const chartDom = document.querySelector('#echarts')
+  const myChart = echarts.init(chartDom)
+  echartLoading.value = myChart
+  const option = {
+    xAxis: {
+      type: 'category',
+      data: x
+    },
+    yAxis: {
+      type: 'value'
+    },
+    series: [
+      {
+        data: y,
+        type: 'bar',
+        showBackground: true,
+        backgroundStyle: {
+          color: 'rgba(180, 180, 180, 0.2)'
+        }
+      }
+    ]
+  }
+  option && myChart.setOption(option)
+}
+// 切换图表
+const changeEchartType = async (type) => {
+  try {
+    echartLoading.value.showLoading()
+    echartType.value = type
+    await getStatistics()
+  } catch (e) {
+    console.log(e)
+  }
+  echartLoading.value.hideLoading()
 }
 </script>
 
@@ -224,5 +270,10 @@ const toViews = (path) => {
       }
     }
   }
+}
+
+#echarts {
+  height: 300px;
+  width: 600px;
 }
 </style>
