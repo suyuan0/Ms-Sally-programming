@@ -22,7 +22,6 @@ import AppAside from './AppAside'
 import AppMain from './AppMain'
 import { useStore } from 'vuex'
 import { computed } from 'vue'
-
 import TagsView from '@/components/TagsView'
 
 const store = useStore()
