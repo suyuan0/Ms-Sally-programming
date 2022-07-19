@@ -184,7 +184,7 @@ const changeIsCollapse = () => {
 
 <style lang='scss' scoped>
 .header-container {
-  z-index: 10000;
+  z-index: 100;
   color: #fff;
   display: flex;
   align-items: center;
