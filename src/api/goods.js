@@ -28,8 +28,9 @@ export const goodsListAPI = (current, data) => {
  * @returns {AxiosPromise}
  */
 export const addGoodsAPI = (data) => {
+  const url = data.id ? `/goods/${data.id}` : '/goods'
   return request({
-    url: '/goods',
+    url,
     method: 'POST',
     data
   })
