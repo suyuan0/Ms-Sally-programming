@@ -22,3 +22,15 @@ export const goodsListAPI = (current, data) => {
     data: query
   })
 }
+/**
+ * 添加商品
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export const addGoodsAPI = (data) => {
+  return request({
+    url: '/goods',
+    method: 'POST',
+    data
+  })
+}
