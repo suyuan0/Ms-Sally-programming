@@ -27,10 +27,15 @@ export const updateSkuStatusAPI = (id, data) => {
     data
   })
 }
-
+/**
+ * 添加 修改
+ * @param data
+ * @returns {AxiosPromise}
+ */
 export const addSkusAPI = (data) => {
+  const url = data.id ? `/skus/${data.id}` : '/skus'
   return request({
-    url: '/skus',
+    url,
     method: 'POST',
     data
   })

@@ -17,7 +17,7 @@
           <el-switch v-model='row.switchStatus' style='margin: 0 10px'
                      @change='(status)=>handleChangeSkuStatus(status,row)'></el-switch>
         </template>
-        <template #action>
+        <template #action='{row}'>
           <el-button link type='primary' @click='handleEditSuk(row)'>修改</el-button>
           <el-button link type='primary' @click='handleDeleteSuk(row.id)'>删除</el-button>
         </template>
@@ -28,7 +28,7 @@
   <!--  添加--修改-抽屉-->
   <el-drawer v-model='sukModelShow' size='40%'>
     <template #header>
-      <span>新增</span>
+      <span>{{ drawerTitle }}</span>
     </template>
     <el-form ref='skuListFormRef' :model='skuListModel' :rules='rules' label-width='100px'>
       <el-form-item label='规格名称' prop='name'>
@@ -78,7 +78,7 @@
 import ATable from '@/components/Table/a-table'
 import Paging from '@/components/Paging'
 import { getSkuListAPI, updateSkuStatusAPI, addSkusAPI } from '@/api/skus'
-import { reactive, ref, nextTick } from 'vue'
+import { reactive, ref, nextTick, computed } from 'vue'
 import clos from './clos'
 import { Notification } from '@/utils/Notification'
 import rules from './rules'
@@ -92,6 +92,10 @@ const skuListModel = reactive({
   name: '',
   order: 50,
   status: 1
+})
+// 抽屉标题
+const drawerTitle = computed(() => {
+  return skuListModel.id ? '修改' : '新增'
 })
 // 表单ref
 const skuListFormRef = ref(null)
@@ -138,7 +142,7 @@ const handleSubmit = async () => {
     await skuListFormRef.value.validate()
     await addSkusAPI(options)
     await getSukList()
-    Notification('新增成功', '', 'success')
+    Notification(skuListModel.id ? '修改成功' : '新增成功', '', 'success')
     handleResetForm()
   } catch (e) {
 
@@ -176,6 +180,15 @@ const handleClose = (i) => {
 const handleResetForm = () => {
   skuListFormRef.value.resetFields()
   sukModelShow.value = false
+}
+// 修改
+const handleEditSuk = (row) => {
+  const options = { ...row }
+  options.default = options.default.split(',')
+  for (const key in options) {
+    skuListModel[key] = options[key]
+  }
+  sukModelShow.value = true
 }
 </script>
 
