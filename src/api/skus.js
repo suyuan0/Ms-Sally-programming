@@ -14,3 +14,16 @@ export const getSkuListAPI = (current) => {
     method: 'GET'
   })
 }
+/**
+ * 修改状态
+ * @param id
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export const updateSkuStatusAPI = (id, data) => {
+  return request({
+    url: `skus/${id}/update_status`,
+    method: 'POST',
+    data
+  })
+}
