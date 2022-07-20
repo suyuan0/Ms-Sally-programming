@@ -1,3 +1,6 @@
+/**
+ * 分类模块
+ */
 import request from '@/utils/request'
 
 /**
