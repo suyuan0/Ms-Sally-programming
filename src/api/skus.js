@@ -40,3 +40,15 @@ export const addSkusAPI = (data) => {
     data
   })
 }
+/**
+ * 删除规格
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export const delSkus = (data) => {
+  return request({
+    url: '/skus/delete_all',
+    method: 'POST',
+    data
+  })
+}
