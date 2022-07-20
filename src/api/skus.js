@@ -27,3 +27,11 @@ export const updateSkuStatusAPI = (id, data) => {
     data
   })
 }
+
+export const addSkusAPI = (data) => {
+  return request({
+    url: '/skus',
+    method: 'POST',
+    data
+  })
+}
