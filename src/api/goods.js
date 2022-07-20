@@ -35,3 +35,43 @@ export const addGoodsAPI = (data) => {
     data
   })
 }
+/**
+ * 上架或下架
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export const changeStatusAPI = (data) => {
+  return request({
+    url: `goods/changestatus`,
+    method: 'POST',
+    data
+  })
+}
+/**
+ * 恢复商品
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export const goodsRestoreAPI = (data) => {
+  return request({
+    url: `goods/restore`,
+    method: 'POST',
+    data
+  })
+}
+// 删除
+export const goodsDeleteAPI = (data) => {
+  return request({
+    url: `goods/delete_all`,
+    method: 'POST',
+    data
+  })
+}
+// 彻底删除
+export const goodsDeleteDestroyAPI = (data) => {
+  return request({
+    url: `goods/destroy`,
+    method: 'POST',
+    data
+  })
+}

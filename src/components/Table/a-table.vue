@@ -1,5 +1,5 @@
 <template>
-  <el-table :data='data'>
+  <el-table :data='data' @selection-change='selectChange'>
     <el-table-column
       v-for='(item,i) in clos'
       :key='i'
@@ -17,8 +17,9 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
+import { defineProps, defineEmits } from 'vue'
 
+const emits = defineEmits(['selectChange'])
 defineProps({
   clos: {
     type: Array,
@@ -29,6 +30,10 @@ defineProps({
     default: () => []
   }
 })
+// 选线发生变化时触发
+const selectChange = (selection) => {
+  emits('selectChange', selection)
+}
 </script>
 
 <style scoped>
