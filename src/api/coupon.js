@@ -15,3 +15,15 @@ export const couponListAPI = (current) => {
     method: 'GET'
   })
 }
+/**
+ * 添加--修改优惠券
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export const couponAPI = (data) => {
+  return request({
+    url: '/coupon',
+    method: 'POST',
+    data
+  })
+}
