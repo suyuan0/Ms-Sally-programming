@@ -75,3 +75,16 @@ export const goodsDeleteDestroyAPI = (data) => {
     data
   })
 }
+/**
+ * 商品审核
+ * @param id
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export const goodsCheckAPI = (id, data) => {
+  return request({
+    url: `goods/${id}/check`,
+    method: 'POST',
+    data
+  })
+}

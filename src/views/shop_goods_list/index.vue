@@ -81,11 +81,15 @@
           <el-tag v-else type='danger'>仓库</el-tag>
         </template>
         <!--        审核状态-->
-        <template v-slot:audit='{row:{ischeck}}'>
+        <template v-slot:audit='{row:{ischeck,id}}'>
           <div
             style='width: 55px;height:60px;display: flex;flex-direction: column;align-items: center;justify-content: space-around'>
-            <el-button v-if='ischeck===0' plain size='small' type='success'>审核通过</el-button>
-            <el-button v-if='ischeck===0' plain size='small' style='margin: 0' type='danger'>审核拒绝</el-button>
+            <el-button v-if='ischeck===0' plain size='small' type='success' @click='handleIscheck(1,id)'>审核通过
+            </el-button>
+            <el-button v-if='ischeck===0' plain size='small' style='margin: 0' type='danger'
+                       @click='handleIscheck(2,id)'>
+              审核拒绝
+            </el-button>
             <span v-if='ischeck===1'>通过</span>
             <span v-if='ischeck===2'>拒绝</span>
           </div>
@@ -188,7 +192,8 @@ import {
   changeStatusAPI,
   goodsRestoreAPI,
   goodsDeleteAPI,
-  goodsDeleteDestroyAPI
+  goodsDeleteDestroyAPI,
+  goodsCheckAPI
 } from '@/api/goods'
 import { computed, reactive, ref } from 'vue'
 import tabsOptions from './tabsOptions'
@@ -362,6 +367,16 @@ const handleDeleteGoodsDestory = async () => {
     await goodsDeleteDestroyAPI(options)
     Notification('删除成功', '', 'success')
     getGoodsList()
+  } catch (e) {
+    console.log(e)
+  }
+}
+// 商品审核
+const handleIscheck = async (ischeck, id) => {
+  try {
+    await goodsCheckAPI(id, { ischeck })
+    await getGoodsList()
+    Notification('操作成功', '', 'success')
   } catch (e) {
     console.log(e)
   }
