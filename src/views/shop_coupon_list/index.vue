@@ -11,16 +11,16 @@
       <ATable :clos='clos' :data='couponList'>
         <!--        优惠券名称-->
         <template #coupon_name='{row}'>
-          <div :class='{border:couponStatus(row.start_time, row.end_time)==="1"}' class='coupon_name'>
+          <div :class='{border:couponStatus(row.start_time, row.end_time,row.status)==="1"}' class='coupon_name'>
             <span>{{ row.name }}</span>
             <span>{{ row.start_time }} ~ {{ row.end_time }}</span>
           </div>
         </template>
         <!--        状态-->
         <template #status='{row}'>
-          <span v-if='couponStatus(row.start_time, row.end_time)==="0"'>未开始</span>
-          <span v-if='couponStatus(row.start_time, row.end_time)==="2"'>已结束</span>
-          <span v-if='couponStatus(row.start_time, row.end_time)==="1"'>领取中</span>
+          <span v-if='couponStatus(row.start_time, row.end_time,row.status)==="0"'>未开始</span>
+          <span v-if='couponStatus(row.start_time, row.end_time,row.status)==="2"'>已结束</span>
+          <span v-if='couponStatus(row.start_time, row.end_time,row.status)==="1"'>领取中</span>
         </template>
         <!--        优惠-->
         <template #discount='{row}'>
@@ -28,16 +28,16 @@
         </template>
         <!--        操作-->
         <template #action='{row}'>
-          <el-button v-if='couponStatus(row.start_time, row.end_time)==="0"' size='small' text type='primary'
+          <el-button v-if='couponStatus(row.start_time, row.end_time,row.status)==="0"' size='small' text type='primary'
                      @click='handleEdit(row)'>修改
           </el-button>
-          <el-popconfirm v-if='couponStatus(row.start_time, row.end_time)!=="1"' title='确定要删除该优惠券吗?'
+          <el-popconfirm v-if='couponStatus(row.start_time, row.end_time,row.status)!=="1"' title='确定要删除该优惠券吗?'
                          @confirm='handleDelete(row.id)'>
             <template #reference>
               <el-button text type='primary'>删除</el-button>
             </template>
           </el-popconfirm>
-          <el-button v-if='couponStatus(row.start_time, row.end_time)==="1"' type='danger'
+          <el-button v-if='couponStatus(row.start_time, row.end_time,row.status)==="1"' type='danger'
                      @click='handleFailure(row.id)'>失效
           </el-button>
         </template>
