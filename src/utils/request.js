@@ -48,6 +48,7 @@ instance.interceptors.response.use(
   },
   (error) => {
     NProgress.done()
+    // loadingType().close()
     store.dispatch('loading/endLoading')
     const { message } = error
     if (message.includes('Network Error')) {
