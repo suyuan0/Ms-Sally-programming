@@ -13,3 +13,11 @@ export const userListAPI = (data) => {
     data: query
   })
 }
+// 添加用户 || 修改用户
+export const addUserListAPI = (data) => {
+  return request({
+    url: '/user',
+    method: 'POST',
+    data
+  })
+}

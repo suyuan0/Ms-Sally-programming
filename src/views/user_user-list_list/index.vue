@@ -7,7 +7,7 @@
           <el-input v-model.trim='queryModel.keyword' clearable placeholder='手机号/邮箱/会员昵称'></el-input>
         </el-form-item>
         <el-form-item v-if='userLevelShow' label='会员等级'>
-          <el-select v-model='queryModel.user_level_id' :props='{label:"name",value:"id"}' placeholder='请选择会员等级'>
+          <el-select v-model='queryModel.user_level_id' placeholder='请选择会员等级'>
             <el-option v-for='item in userLevel' :key='item.id' :label='item.name' :value='item.id'></el-option>
           </el-select>
         </el-form-item>
@@ -54,15 +54,76 @@
       </template>
     </ATable>
     <Paging :total='total' @currentChange='currentChange'></Paging>
+    <!--    添加-编辑抽屉-->
+    <el-drawer v-model='drawerVisable' size='40%'>
+      <template #header>
+        <span>新增</span>
+      </template>
+      <el-form ref='userListFormRef' :model='userListModel' :rules='formRules' label-width='80px'>
+        <el-form-item label='用户名' prop='username'>
+          <el-input v-model.trim='userListModel.username' :maxlength='25' :min='4'></el-input>
+        </el-form-item>
+        <el-form-item label='密码' prop='password'>
+          <el-input v-model.trim='userListModel.password' show-password type='password'></el-input>
+        </el-form-item>
+        <el-form-item label='昵称'>
+          <el-input v-model.trim='userListModel.nickname'></el-input>
+        </el-form-item>
+        <el-form-item label='头像'>
+          <el-upload list-type='picture-card'>
+            <el-icon>
+              <Plus />
+            </el-icon>
+          </el-upload>
+        </el-form-item>
+        <el-form-item label='会员等级' porp='user_level_id'>
+          <el-select v-model='userListModel.user_level_id' placeholder='请选择会员等级'>
+            <el-option v-for='item in userLevel' :key='item.id' :label='item.name' :value='item.id'></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label='手机' prop='phone'>
+          <el-input v-model.trim='userListModel.phone'></el-input>
+        </el-form-item>
+        <el-form-item label='邮箱' prop='email'>
+          <el-input v-model.trim='userListModel.email'></el-input>
+        </el-form-item>
+        <el-form-item label='状态'>
+          <el-switch v-model='userListModel.status' :active-value='1' :inactive-value='0'></el-switch>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class='footer'>
+          <el-button type='primary' @click='handleAddUser'>提交</el-button>
+          <el-button type='default' @click='handleResetUserForm'>取消</el-button>
+        </div>
+      </template>
+    </el-drawer>
   </el-card>
 </template>
 
 <script setup>
 import { reactive, ref } from 'vue'
-import { userListAPI } from '@/api/user/userList'
+import { userListAPI, addUserListAPI } from '@/api/user/userList'
+import { Notification } from '@/utils/Notification'
 import ATable from '@/components/Table/a-table'
 import column from './tableColumn'
 import Paging from '@/components/Paging'
+import formRules from './formRules'
+// 添加-修改表单ref
+const userListFormRef = ref(null)
+// 添加-修改数据模型
+const userListModel = reactive({
+  avatar: '',
+  email: '',
+  nickname: '',
+  password: '',
+  phone: '',
+  status: 1,
+  user_level_id: '',
+  username: ''
+})
+// 添加-编辑抽屉是否显示
+const drawerVisable = ref(false)
 // 查询模型
 const queryModel = reactive({
   current: 1,
@@ -114,6 +175,23 @@ const currentChange = (value) => {
   queryModel.current = value
   getUserList()
 }
+// 添加
+const handleAddUser = async () => {
+  try {
+    await userListFormRef.value.validate()
+    await addUserListAPI(userListModel)
+    await getUserList()
+    handleResetUserForm()
+    Notification('添加成功', '', 'success')
+  } catch (e) {
+    console.log(e)
+  }
+}
+// 重置用户表单
+const handleResetUserForm = () => {
+  userListFormRef.value.resetFields()
+  drawerVisable.value = false
+}
 </script>
 
 <style lang='scss' scoped>
@@ -159,5 +237,10 @@ const currentChange = (value) => {
       }
     }
   }
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-start;
 }
 </style>
