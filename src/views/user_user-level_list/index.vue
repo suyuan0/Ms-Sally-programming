@@ -10,7 +10,7 @@
     <!--    表格-->
     <ATable :clos='tableColumn' :data='levelList' stripe>
       <template #status='{row}'>
-        <el-switch v-model='row.switchStatus'></el-switch>
+        <el-switch v-model='row.switchStatus' @change='status=>handleChangeStatus(status,row.id)'></el-switch>
       </template>
       <template #action>
         <el-button link type='primary'>修改</el-button>
@@ -18,16 +18,17 @@
       </template>
     </ATable>
     <!--    分页-->
-    <Paging :total='total'></Paging>
+    <Paging :total='total' @currentChange='currentChange'></Paging>
   </el-card>
 </template>
 
 <script setup>
-import { getLevelListAPI } from '@/api/user/userLevel'
+import { getLevelListAPI, editStatusAPI } from '@/api/user/userLevel'
 import { ref } from 'vue'
 import ATable from '@/components/Table/a-table'
 import tableColumn from './tableColumn'
 import Paging from '@/components/Paging'
+import { Notification } from '@/utils/Notification'
 // 页码
 const current = ref(1)
 // 等级列表
@@ -51,6 +52,26 @@ const getLevelList = async () => {
   }
 }
 getLevelList()
+// 修改状态
+const handleChangeStatus = async (switchStatus, id) => {
+  try {
+    const status = switchStatus ? 1 : 0
+    await editStatusAPI(id, { status })
+    await getLevelList()
+    Notification('修改状态成功', '', 'success')
+  } catch (e) {
+    console.log(e)
+  }
+}
+// 分页
+const currentChange = async (currentPage) => {
+  try {
+    current.value = currentPage
+    await getLevelList()
+  } catch (e) {
+    console.log(e)
+  }
+}
 </script>
 
 <style lang='scss' scoped>
