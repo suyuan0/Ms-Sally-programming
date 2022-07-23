@@ -15,8 +15,9 @@ export const userListAPI = (data) => {
 }
 // 添加用户 || 修改用户
 export const addUserListAPI = (data) => {
+  const url = data.id ? `/user/${data.id}` : '/user'
   return request({
-    url: '/user',
+    url,
     method: 'POST',
     data
   })

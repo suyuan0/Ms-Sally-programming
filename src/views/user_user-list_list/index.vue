@@ -26,7 +26,7 @@
     </div>
     <!--    新增--刷新-->
     <div class='refresh'>
-      <el-button size='small' type='primary'>新增</el-button>
+      <el-button size='small' type='primary' @click='drawerVisable=true'>新增</el-button>
       <el-tooltip content='刷新数据' placement='top'>
         <el-button icon='Refresh' text></el-button>
       </el-tooltip>
@@ -48,8 +48,8 @@
       <template #status='{row}'>
         <el-switch v-model='row.switchStatus'></el-switch>
       </template>
-      <template #action>
-        <el-button link type='primary'>修改</el-button>
+      <template #action='{row}'>
+        <el-button link type='primary' @click='handleEdit(row)'>修改</el-button>
         <el-button link type='primary'>删除</el-button>
       </template>
     </ATable>
@@ -57,13 +57,13 @@
     <!--    添加-编辑抽屉-->
     <el-drawer v-model='drawerVisable' size='40%'>
       <template #header>
-        <span>新增</span>
+        <span>{{ drawerTitle }}</span>
       </template>
       <el-form ref='userListFormRef' :model='userListModel' :rules='formRules' label-width='80px'>
         <el-form-item label='用户名' prop='username'>
           <el-input v-model.trim='userListModel.username' :maxlength='25' :min='4'></el-input>
         </el-form-item>
-        <el-form-item label='密码' prop='password'>
+        <el-form-item :prop='userListModel.id ?"" :"password"' label='密码'>
           <el-input v-model.trim='userListModel.password' show-password type='password'></el-input>
         </el-form-item>
         <el-form-item label='昵称'>
@@ -102,13 +102,17 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { userListAPI, addUserListAPI } from '@/api/user/userList'
 import { Notification } from '@/utils/Notification'
 import ATable from '@/components/Table/a-table'
 import column from './tableColumn'
 import Paging from '@/components/Paging'
 import formRules from './formRules'
+// 抽屉标题
+const drawerTitle = computed(() => {
+  return userListModel.id ? '修改' : '新增'
+})
 // 添加-修改表单ref
 const userListFormRef = ref(null)
 // 添加-修改数据模型
@@ -182,15 +186,29 @@ const handleAddUser = async () => {
     await addUserListAPI(userListModel)
     await getUserList()
     handleResetUserForm()
-    Notification('添加成功', '', 'success')
+    Notification(userListModel.id ? '修改成功' : '添加成功', '', 'success')
   } catch (e) {
     console.log(e)
   }
 }
 // 重置用户表单
-const handleResetUserForm = () => {
-  userListFormRef.value.resetFields()
+const handleResetUserForm = async () => {
+  await userListFormRef.value.resetFields()
+  for (const key in userListModel) {
+    if (key === 'status') {
+      userListModel[key] = 1
+    } else {
+      userListModel[key] = ''
+    }
+  }
   drawerVisable.value = false
+}
+// 修改
+const handleEdit = (row) => {
+  for (const rowKey in row) {
+    userListModel[rowKey] = row[rowKey]
+  }
+  drawerVisable.value = true
 }
 </script>
 
