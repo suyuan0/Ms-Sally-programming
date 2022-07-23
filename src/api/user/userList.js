@@ -22,3 +22,18 @@ export const addUserListAPI = (data) => {
     data
   })
 }
+// 修改用户状态
+export const editUserStatusAPI = (id, status) => {
+  return request({
+    url: `/user/${id}/update_status`,
+    method: 'POST',
+    data: status
+  })
+}
+// 删除用户
+export const delUserListAPI = (id) => {
+  return request({
+    url: `/user/${id}/delete`,
+    method: 'POST'
+  })
+}
