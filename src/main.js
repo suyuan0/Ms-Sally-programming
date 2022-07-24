@@ -10,6 +10,12 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import './permission'
 import './styles/loading.scss'
 
+import VueQuillEditor from 'vue-quill-editor'
+// require styles 引入样式
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+
 const app = createApp(App)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
@@ -17,4 +23,5 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 app.use(ElementPlus, {
   locale: zhCn
 })
+app.use(VueQuillEditor)
 app.use(store).use(router).mount('#app')

@@ -100,7 +100,7 @@
             <el-button link type='primary' @click='handleEditGoods(row)'>修改</el-button>
             <el-button link type='primary'>商品规格</el-button>
             <el-button link type='primary'>设置轮播图</el-button>
-            <el-button link type='primary'>商品详情</el-button>
+            <el-button link type='primary' @click='handleGoodsDetail(row)'>商品详情</el-button>
             <el-popconfirm title='是否要删除该商品?' @confirm='handleDelGoods(row,"one")'>
               <template #reference>
                 <el-button link type='primary'>删除</el-button>
@@ -182,10 +182,26 @@
         </div>
       </template>
     </el-drawer>
+    <!--    商品详情抽屉-->
+    <el-drawer v-model='goodsDetailVisible' size='40%'>
+      <template #header>
+        <span>设置商品详情</span>
+      </template>
+      <div style='height: 500px;'>
+        <Uedit v-model='content'></Uedit>
+      </div>
+      <template #footer>
+        <div style='display: flex;justify-content: flex-start;'>
+          <el-button type='primary'>提交</el-button>
+          <el-button @click='goodsDetailVisible=false'>取消</el-button>
+        </div>
+      </template>
+    </el-drawer>
   </div>
 </template>
 
 <script setup>
+import Uedit from '@/components/Uedit'
 import {
   goodsListAPI,
   addGoodsAPI,
@@ -202,6 +218,11 @@ import tableClos from './tableClos'
 import Paging from '@/components/Paging'
 import formRules from './formRules'
 import { Notification } from '@/utils/Notification'
+
+// 富文本绑定内容
+const content = ref('')
+// 商品详情抽屉Visible
+const goodsDetailVisible = ref(false)
 // 抽屉标题
 const drawerTitle = computed(() => {
   return goodsModel.id ? '修改' : '新增'
@@ -381,6 +402,11 @@ const handleIscheck = async (ischeck, id) => {
     console.log(e)
   }
 }
+// 商品详情
+const handleGoodsDetail = (row) => {
+  content.value = row.content
+  goodsDetailVisible.value = true
+}
 </script>
 
 <style lang='scss' scoped>
@@ -471,4 +497,5 @@ const handleIscheck = async (ischeck, id) => {
   width: 100px;
   height: 100px;
 }
+
 </style>
