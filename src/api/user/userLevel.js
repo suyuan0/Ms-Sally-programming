@@ -23,3 +23,10 @@ export const userLevelAPI = (data) => {
     data
   })
 }
+
+export const deleteLevelAPI = (id) => {
+  return request({
+    url: `user_level/${id}/delete`,
+    method: 'POST'
+  })
+}
